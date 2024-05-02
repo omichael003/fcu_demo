@@ -11,8 +11,8 @@ ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(
                 EndPoints = { "localhost:6379" }
             });
 
-var db = redis.GetDatabase();
-var pong = await db.PingAsync();
+var db = redis.GetDatabase(2);
+var pong = await db.PingAsync(1);
 Console.WriteLine(pong);
 
 while (Console.ReadLine() != "Stop")
