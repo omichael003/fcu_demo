@@ -1,4 +1,4 @@
-name: "Scanning Files with SonarQube"
+name: "Scanning Files with SonarQube scan"
 
 on:
   push:
