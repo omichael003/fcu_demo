@@ -15,6 +15,14 @@ jobs:
       - name: "Checkout"
         uses: actions/checkout@v2
 
+      - name: "Install .NET SDK"
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '3.1' # or specify the version you need
+
+      - name: "Install dotnet-sonarscanner tool"
+        run: dotnet tool install --global dotnet-sonarscanner
+
       - name: "SonarQube Analysis"
         run: |
           dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:${{ secrets.SONARQUBE_PROJECT_KEY }} /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
