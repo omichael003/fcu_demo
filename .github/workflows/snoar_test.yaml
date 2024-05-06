@@ -30,6 +30,7 @@ jobs:
           dotnet test
           dotnet sonarscanner end /d:sonar.login=${{ secrets.SONAR_TOKEN }}
 
+
       - name: "Scanning"
         with:
           fetch-depth: 0
