@@ -24,11 +24,14 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: "SonarQube Analysis"
+        env:
+          SONARQUBE_PROJECT_KEY: "SonarQube-demo"
         run: |
-          dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:${{ secrets.SONARQUBE_PROJECT_KEY }} /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
+          dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:$SONARQUBE_PROJECT_KEY /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
           dotnet build
           dotnet test
           dotnet sonarscanner end /d:sonar.login=${{ secrets.SONAR_TOKEN }}
+
 
 
       - name: "Scanning"
