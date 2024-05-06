@@ -17,10 +17,10 @@ jobs:
 
       - name: "SonarQube Analysis"
         run: |
-          dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONARQUBE_SERVER_URL }} /d:sonar.login=${{ secrets.SONARQUBE_ACCESS_TOKEN }} /k:${{ secrets.SONARQUBE_PROJECT_KEY }} /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
+          dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:${{ secrets.SONARQUBE_PROJECT_KEY }} /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
           dotnet build
           dotnet test
-          dotnet sonarscanner end /d:sonar.login=${{ secrets.SONARQUBE_ACCESS_TOKEN }}
+          dotnet sonarscanner end /d:sonar.login=${{ secrets.SONAR_TOKEN }}
 
       - name: "Scanning"
         with:
