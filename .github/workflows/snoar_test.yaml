@@ -1,4 +1,4 @@
-name: "Scanning Files with SonarQube scan object"
+name: "Scanning Files with SonarQube scan object and Testing"
 
 on:
   push:
@@ -9,11 +9,19 @@ on:
       - main
 
 jobs:
-  Scanning-With-SonarQube:
+  scanning-with-sonarqube-and-testing:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
+
+      - name: "SonarQube Analysis"
+        run: |
+          dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONARQUBE_SERVER_URL }} /d:sonar.login=${{ secrets.SONARQUBE_ACCESS_TOKEN }} /k:${{ secrets.SONARQUBE_PROJECT_KEY }} /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
+          dotnet build
+          dotnet test
+          dotnet sonarscanner end /d:sonar.login=${{ secrets.SONARQUBE_ACCESS_TOKEN }}
+
       - name: "Scanning"
         with:
           fetch-depth: 0
@@ -21,7 +29,8 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PROJECT_KEY: "SonarQube-demo" # Replace 'your_project_key' with the actual key for your project
+          SONAR_PROJECT_KEY: "SonarQube-demo" # Replace 'SonarQube-demo' with the actual key for your project
+
       - name: "Quality Gate"
         uses: sonarsource/sonarqube-quality-gate-action@master
         env:
