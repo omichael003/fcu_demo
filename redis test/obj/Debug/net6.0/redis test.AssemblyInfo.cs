@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("redis test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e81687e07b216396092b939f5f4bddd27bfa6361")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6c30dff2d0aafe0db5478e0c40b93b7511488d48")]
 [assembly: System.Reflection.AssemblyProductAttribute("redis test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("redis test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
