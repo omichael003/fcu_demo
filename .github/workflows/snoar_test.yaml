@@ -18,7 +18,7 @@ jobs:
    - name: "Install .NET SDK"
      uses: actions/setup-dotnet@v1
      with:
-          dotnet-version: '5.1' # or specify the version you need
+          dotnet-version: '5.0' # or specify the version you need
 
    - name: "Install dotnet-sonarscanner tool"
      run: dotnet tool install --global dotnet-sonarscanner
