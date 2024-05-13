@@ -3,48 +3,50 @@ name: "Scanning Files with SonarQube scan object and Testing"
 on:
  push:
   branches:
-   - main
+  - main
  pull_request:
   branches:
-   - main
+  - main
 
 jobs:
  scanning-with-sonarqube-and-testing:
   runs-on: ubuntu-latest
   steps:
-   - name: "Checkout"
-     uses: actions/checkout@v2
+  - name: "Checkout"
+    uses: actions/checkout@v2
 
-   - name: "Install .NET SDK"
-     uses: actions/setup-dotnet@v1
-     with:
-          dotnet-version: '8.0' # or specify the version you need
+  - name: "Install .NET SDK"
+    uses: actions/setup-dotnet@v1
+    with:
+     dotnet-version: '5.0' # or specify the version you need
 
-   - name: "Install dotnet-sonarscanner tool"
-     run: dotnet tool install --global dotnet-sonarscanner
+  - name: "Install dotnet-sonarscanner tool"
+    run: dotnet tool install --global dotnet-sonarscanner
 
-   - name: "SonarQube Analysis"
-     env:
-      SONARQUBE_PROJECT_KEY: "SonarQube-demo"
-     run: |
-      dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:$SONARQUBE_PROJECT_KEY /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
-      dotnet build
-      dotnet test
-      dotnet sonarscanner end /d:sonar.login=${{ secrets.SONAR_TOKEN }}
+  - name: "Remove sonar-project.properties files"
+    run: |
+     find . -name "sonar-project.properties" -delete
 
+  - name: "SonarQube Analysis"
+    env:
+     SONARQUBE_PROJECT_KEY: "SonarQube-demo"
+    run: |
+     dotnet sonarscanner begin /d:sonar.host.url=${{ secrets.SONAR_HOST_URL }} /d:sonar.login=${{ secrets.SONAR_TOKEN }} /k:$SONARQUBE_PROJECT_KEY /n:"MyProjectName" /d:sonar.cs.dotcover.reportsPaths="**/*.dcvr"
+     dotnet build
+     dotnet test
+     dotnet sonarscanner end /d:sonar.login=${{ secrets.SONAR_TOKEN }}
 
+  - name: "Scanning"
+    with:
+     fetch-depth: 0
+    uses: sonarsource/sonarqube-scan-action@master
+    env:
+     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+     SONAR_PROJECT_KEY: "SonarQube-demo" # Replace 'SonarQube-demo' with the actual key for your project
 
-   - name: "Scanning"
-     with:
-      fetch-depth: 0
-     uses: sonarsource/sonarqube-scan-action@master
-     env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      SONAR_PROJECT_KEY: "SonarQube-demo" # Replace 'SonarQube-demo' with the actual key for your project
-
-   - name: "Quality Gate"
-     uses: sonarsource/sonarqube-quality-gate-action@master
-     env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  - name: "Quality Gate"
+    uses: sonarsource/sonarqube-quality-gate-action@master
+    env:
+     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+     SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
